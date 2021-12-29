@@ -6,6 +6,24 @@
         <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+        <script>
+            AFRAME.registerComponent('videohandler', {
+                init: function () {
+                    var marker = this.el;
+                    this.vid = document.querySelector("#vid");
+
+                    marker.addEventListener('markerFound', function () {
+                        this.toggle = true;
+                        this.vid.play();
+                    }.bind(this));
+
+                    marker.addEventListener('markerLost', function () {
+                        this.toggle = false;
+                        this.vid.pause();
+                    }.bind(this));
+                },
+            });
+        </script>
     </head>
 
     <body style="margin: 0; overflow: hidden;">
@@ -23,10 +41,17 @@
                     id="animated-asset1"
                     src="assets/asset.gltf"
                 ></a-asset-item>
-                <a-asset-item
-                    id="animated-asset2"
-                    src="assets/asset2.gltf"
-                ></a-asset-item>
+                <video
+                    id="vid"
+                    src="assets/asset.mp4"
+                    preload="auto"
+                    response-type="arraybuffer"
+                    loop
+                    crossorigin
+                    webkit-playsinline
+                    autoplay
+                    playsinline
+                ></video>
                 <a-asset-item
                     id="animated-asset3"
                     src="assets/asset3.gltf"
@@ -58,19 +83,24 @@
                 type="pattern"
                 preset="custom"
                 url="assets/marker2.patt"
+                videohandler
+                smooth="true"
+                smoothCount="10"
+                smoothTolerance="0.01"
+                smoothThreshold="5"
                 raycaster="objects: .clickable"
                 emitevents="true"
                 cursor="fuse: false; rayOrigin: mouse;"
                 id="marker2"
             >
-                <a-entity
-                    id="bowser-model2"
-                    scale="1.0 1.0 1.0"
-                    animation-mixer="loop: repeat"
-                    gltf-model="#animated-asset2"
+                <a-video
+                    src="#vid"
+                    scale="1 1 1"
+                    position="0 0.1 0"
+                    rotation="-90 0 0"
                     class="clickable"
                     gesture-handler
-                ></a-entity>
+                ></a-video>
             </a-marker>            
 
             <a-marker
@@ -83,13 +113,13 @@
                 cursor="fuse: false; rayOrigin: mouse;"
                 id="marker3"
             >
-                <a-entity
-                    id="bowser-model3"
-                    scale="1.0 1.0 1.0"
-                    animation-mixer="loop: repeat"
-                    gltf-model="#animated-asset3"
+                <a-image
+                    src="assets/asset.jpeg"
+                    scale="1 1 1"
                     class="clickable"
+                    rotation="-90 0 0"
                     gesture-handler
+                ></a-image>
                 ></a-entity>
             </a-marker>
             
